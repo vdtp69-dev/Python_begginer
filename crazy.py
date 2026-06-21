@@ -24,10 +24,8 @@ contacts=load_contacts()
 def add_contacts(contacts):
        name= input("Enter your name:")
        number=input("Enter your number: ")
-       file=open("contacts.txt","a")
-       file.write(f"{name},{number}\n")
-       file.close()
        contacts[name]=number
+       save_contacts(contacts)
        print("Contact added!")
        
        
@@ -104,5 +102,3 @@ while True:
         
     else:
         print("Invalid Choice")
-        
-        
