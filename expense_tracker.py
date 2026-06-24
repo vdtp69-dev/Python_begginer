@@ -1,13 +1,25 @@
 expenses=[]
+def get_valid_amount():
+    while True:
+        try:
+            
+            amt=int(input("Enter the amount you spent: "))
+            if amt>0:
+                return amt
+            else:
+                print("Enter appropriate amount value.")
+        except ValueError:
+            print("Please enter a valid number")
 def add_expense(expenses):
     category=input("Enter the category: ")
-    amount=int(input("Enter the amount you spent: "))
+    amount=get_valid_amount()
     expenses.append([category,amount])
+        
 
 def view_expenses(expenses):
     if len(expenses)>0:
-        for i in expenses:
-            print(f"{i[0]} {i[1]}")
+        for i,a in enumerate(expenses,start=1):
+            print(f"{i}.{a[0]} {a[1]}")
     else:
         print("No expenses recorded yet.")
 
@@ -17,7 +29,7 @@ def show_category_spending(expenses):
         flag=0
         cat_name=input("Enter the category whose total spending you want to know: ")
         for expense in expenses:
-            if cat_name == expense[0]:
+            if cat_name.lower() == expense[0].lower():
                 total+=expense[1]
                 flag=1
         if flag == 1:
@@ -47,16 +59,17 @@ def highest_single_expense(expenses):
     else:
         print("No expenses recorded yet.")
 def highest_spending_category(expenses):
-    total={}
+    category_total={}
     if len(expenses) > 0:
         for expense in expenses:
-            if expense[0] in total:
-                total[expense[0]]+=expense[1]
+            category=expense[0].lower()
+            if category in category_total:
+                category_total[category]+=expense[1]
             else:
-                total[expense[0]]=expense[1]
-        largest=total[expenses[0][0]]
-        name=expenses[0][0]
-        for cat,amt in total.items():
+                category_total[category]=expense[1]
+        largest=category_total[expenses[0][0].lower()]
+        name=expenses[0][0].lower()
+        for cat,amt in category_total.items():
             if largest < amt:
                 largest=amt
                 name=cat
