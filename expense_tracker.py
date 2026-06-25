@@ -1,8 +1,30 @@
-expenses=[]
+def load_expenses():
+    dummy=[]
+    try:
+        file=open("expenses.txt","r")
+        for line in file:
+            task,amt=line.strip().split(",")
+            amount=(int)(amt)
+            dummy.append([task,amount])
+        file.close()
+        return dummy
+    except FileNotFoundError:
+        print("File does not exist.")
+        a=input("Would you like to create a file to store expenses(y/n): ")
+        if a.lower() == "y":
+            file=open("expenses.txt","w")
+            file.close()
+        return dummy
+expenses=load_expenses()
+def save_expenses(expenses):
+    file = open("expenses.txt","w")
+    for expense in expenses:
+        file.write(f"{expense[0]},{expense[1]}\n")
+    file.close()
+    
 def get_valid_amount():
     while True:
         try:
-            
             amt=int(input("Enter the amount you spent: "))
             if amt>0:
                 return amt
@@ -14,6 +36,7 @@ def add_expense(expenses):
     category=input("Enter the category: ")
     amount=get_valid_amount()
     expenses.append([category,amount])
+    save_expenses(expenses)
         
 
 def view_expenses(expenses):
@@ -76,6 +99,21 @@ def highest_spending_category(expenses):
         print(f"The largest spending category is {name} : {largest}")
     else:
         print("No expenses recorded yet.")  
+        
+def delete_expense(expenses):
+    if len(expenses)>0:
+        while True:
+            try:
+                a=int(input("Which expense you want to delete(Tell us the expense number): "))
+                if 1<=a<=len(expenses):
+                    expenses.pop(a-1)
+                    save_expenses(expenses)
+                    print("Expense Deleted Successfully!")
+                    break
+                else:
+                    print("Doesn't exist.")
+            except ValueError:
+                print("Enter a proper value.")
 while True:
     print("\n1.Add Expense")
     print("2.View Expense")
@@ -83,7 +121,8 @@ while True:
     print("4.Show Total spending")
     print("5. Highest Single Expense")
     print("6. Highest Spending Category")
-    print("7.Exit")
+    print("7.Delete Expense")
+    print("8.Exit")
     
     choice=input("Enter your choice:")
     
@@ -100,6 +139,8 @@ while True:
     elif choice == '6':
         highest_spending_category(expenses)
     elif choice == '7':
+        delete_expense(expenses)
+    elif choice == '8':
         print("Goodbye!")
         break
     else:
